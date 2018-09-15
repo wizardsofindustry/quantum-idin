@@ -79,9 +79,10 @@ paths:
         qualname: IssuerCtrl
     parameters:
     - name: country
-      type: string
       in: path
       required: true
+      schema:
+        type: string
     get:
       operationId: get_vendors_for_country
       responses:
@@ -111,12 +112,41 @@ paths:
       operationId: get_vendors
       responses:
         200:
-          description:
+          description: >
             All participating banks.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/IssuerSet"
+        503:
+          $ref: "#/components/responses/ServiceNotAvailable"
+        default:
+          $ref: "#/components/responses/UncaughException"
+
+  /transactions:
+    summary: >
+      Create and inspect iDIN transactions.
+    x-endpoint:
+      classname: TransactionEndpoint
+      controller:
+        qualname: TransactionCtrl
+    post:
+      operationId: create_transaction
+      responses:
+        201:
+          description: >
+            A new transaction is created.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - url
+                properties:
+                  url:
+                    type: string
+                    description: >
+                      The URL to which the end-client must be redirected.
         503:
           $ref: "#/components/responses/ServiceNotAvailable"
         default:
