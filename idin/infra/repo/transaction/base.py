@@ -5,7 +5,7 @@ from sq.persistence import Repository
 class BaseTransactionRepository(Repository):
     session = ioc.class_property('DatabaseSessionFactory')
 
-    def persist_tx(self):
+    def persist_tx(self, dto):
         raise NotImplementedError("Subclasses must override this method.")
 
 
