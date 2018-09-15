@@ -19,7 +19,15 @@ class IdinService(BaseIdinService):
             'transaction_id': dto.txid,
             'merchant_reference': self.finder.reference(dto.txid)
         })
-        return status
+        if status.pop('status') == 'success':
+            dto = self.dto(
+                storage_class='result',
+                txid=status.pop('transaction_id'),
+                issuer_id=status.pop('issuer_id'),
+                result=status
+            )
+            self.repo.persist(dto)
+        return dto.data
 
     def transaction(self, dto):
         """Create a new iDIN transaction and return the redirect
