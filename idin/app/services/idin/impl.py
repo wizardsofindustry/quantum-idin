@@ -17,7 +17,7 @@ class IdinService(BaseIdinService):
         # Get the status from CM telecom.
         status = self._request('POST', '/status', json={
             'transaction_id': dto.txid,
-            'merchant_reference': self.finder.get_reference(dto.txid)
+            'merchant_reference': self.finder.reference(dto.txid)
         })
         return status
 

@@ -114,6 +114,10 @@ dependencies:
   attname: repo
   desc: >
     Storage abstraction for iDIN transaction data.
+- require: TransactionFinder
+  attname: finder
+  desc: >
+    Queries the iDIN transaction datastore.
 
 
 # Specifies exception classes that the service will declare.
