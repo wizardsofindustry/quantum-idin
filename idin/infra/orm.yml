@@ -33,3 +33,40 @@ relations:
     type: string
     description: >
       Reference at the intermediary for accounting purposes.
+
+- relname: results
+  classname: Result
+  description: >
+    Maintains the results of successful iDIN transactions.
+  columns:
+  - name: txid
+    ref: transactions.txid
+    primary_key: true
+    description: >
+      Identifies the transaction of this result.
+  - name: issuer_id
+    type: string
+    description: >
+      Identifies the issuer.
+  - name: data
+    type: string
+    description: >
+      The data yielded by the iDIN transaction, serialized as JSON with sorted
+      keys.
+  - name: checksum
+    type: binary
+    description: >
+      A SHA-256 hash of the transaction identifier and the result.
+  - name: retrieved
+    type: int64
+    description: >
+      The date/time at which the result was retrieved, in milliseconds since the UNIX
+      epoch.
+  - name: timestamped
+    type: boolean
+    default:
+      type: literal
+      value: "False"
+    description: >
+      Specifies if a secure time stamp is requested and persisted for the
+      checksum of this result.
