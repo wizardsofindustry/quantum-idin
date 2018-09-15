@@ -28,6 +28,14 @@ class BaseTransactionCtrl(EndpointCtrl):
         """
         raise NotImplementedError("Subclasses must override this method.")
 
+    async def patch(self, request, *args, **kwargs):
+        """This method specifies the signature for :meth:`TransactionCtrl.patch()`
+        and should be implemented in the following file:
+
+            ./idin/ctrl/transaction/impl.py
+        """
+        raise NotImplementedError("Subclasses must override this method.")
+
 
 #pylint: skip-file
 # !!! SG MANAGED FILE -- DO NOT EDIT -- VERSION:  !!!
