@@ -34,6 +34,8 @@ os.environ.setdefault('IDIN_DEBUG', "1")
 os.environ.setdefault('IDIN_IOC_DEFAULTS', "/etc/idin/ioc.conf")
 os.environ.setdefault('IDIN_IOC_DIR', "/etc/idin/ioc.conf.d/")
 os.environ.setdefault('IDIN_RDBMS_DSN', "postgresql+psycopg2://idin:idin@rdbms:5432/idin")
+os.environ.setdefault('IDIN_HTTP_ADDR', "0.0.0.0")
+os.environ.setdefault('IDIN_HTTP_PORT', "8443")
 
 
 class MainProcess(sq.runtime.MainProcess):
