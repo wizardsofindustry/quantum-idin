@@ -1,7 +1,9 @@
+import ioc
 from sq.service import Service
 
 
 class BaseIdinService(Service):
+    repo = ioc.class_property('TransactionRepository')
 
     def issuers(self):
         raise NotImplementedError("Subclasses must override this method.")
