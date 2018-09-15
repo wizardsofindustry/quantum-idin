@@ -238,7 +238,7 @@ components:
           default: false
           description: >
             Retrieve the birthdate of the user.
-        18y_or_older:
+        legal_age:
           type: boolean
           default: false
           description: >
