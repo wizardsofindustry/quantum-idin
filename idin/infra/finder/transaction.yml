@@ -58,15 +58,26 @@ bases:
 # parameters in the method signature.
 methods:
 - name: reference
-  parameters: []
+  parameters:
+  - name: txid
   args: no
   kwargs: no
-  doc: null
+  doc:
+    heading: >
+      Returns the merchant reference for the transaction identified by
+      ``txid``.
+    returns: string
 - name: result
-  parameters: []
+  parameters:
+  - txid
+  - ec
   args: no
   kwargs: no
-  doc: null
+  doc:
+    heading: >
+      Returns a Data Transfer Object (DTO) containing the result
+      of an iDIN transaction.
+    returns: Data Transfer Object (DTO)
 
 
 # A list containing dependencies from the inversion-of-control
