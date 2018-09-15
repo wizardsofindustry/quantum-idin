@@ -1,9 +1,10 @@
 """Declares :class:`IdinService`."""
+import os
+
 import requests
 
-from .base import BaseIdinService
-
 import idin.environ
+from .base import BaseIdinService
 
 
 class IdinService(BaseIdinService):
@@ -14,7 +15,25 @@ class IdinService(BaseIdinService):
         """Create a new iDIN transaction and return the redirect
         URL.
         """
-        return self.dto(url=response['merchant_return_url'])
+        ec = bytes.hex(os.urandom(20))
+        params = dict(dto)
+        params.update({
+            '18y_or_older': params.pop('18y_or_older', False),
+            'merchant_token': idin.environ.CM_MERCHANT_TOKEN,
+            'merchant_return_url': params.pop('redirect_uri'),
+            'ec': ec
+        })
+        response = self._request('POST', '/transaction', json=params)
+        if response.status_code != 200:
+            raise RuntimeError(response.text)
+        result = response.json()
+        txid = result['transaction_id']
+        ref = result['merchant_reference']
+
+        return self.dto(
+            url=result['merchant_return_url'],
+            txid=txid
+        )
 
     def issuers(self, country=None):
         """Return a list containing all issuers."""

@@ -210,7 +210,7 @@ components:
       nullable: false
       required:
       - issuer_id
-      - merchant_return_url
+      - redirect_uri
       properties:
         identity:
           type: boolean
