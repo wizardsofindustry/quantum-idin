@@ -32,7 +32,7 @@ class Transaction(Relation):
         sqlalchemy.String,
         name='status',
         nullable=False,
-        default=open
+        default='open'
     )
 
     #: Entrance code to be included in the response from the iDIN
