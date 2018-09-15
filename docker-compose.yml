@@ -1,0 +1,52 @@
+---
+#######################################################################
+#
+# IDIN SYSTEM COMPOSE FILE
+#
+# This Docker Compose configuration file sets a Docker network
+# resembling the production system environment hosting the
+# application.
+#
+# In addition to the environment variables recognized by the
+# application, the following variables configure the behavior of the
+# spawned containers:
+#
+# IDIN_HTTP_PORT:
+#   Specifies the port to which the HTTP server binds (default: 8443).
+# IDIN_RDBMS_PORT:
+#   Specifies the port to which the Relational Database Management
+#   System (RDBMS) binds.
+# IDIN_AMQP_PORT:
+#   Specifies the port to which the Aorta backend binds (default: 5672).
+#   Consumers may connect to this port in order to *receive* messages
+#   published in the system.
+# IDIN_MQADM_PORT:
+#   Specifies the port to which the administrative web interface of
+#   the message broker backend binds (default: 8161).
+#
+#######################################################################
+version: '3'
+services:
+  idin:
+    build: .
+    environment:
+    - IDIN_RUNTIME=${IDIN_RUNTIME-service}
+    - IDIN_SECRET_KEY=70422360908e67dbbe1ac7bcf98f16b194ae51e779f690d9598c2d596c6e4bb4
+    - IDIN_DEBUG=1
+    - IDIN_IOC_DEFAULTS=/etc/idin/ioc.conf
+    - IDIN_IOC_DIR=/etc/idin/ioc.conf.d/
+    - IDIN_RDBMS_DSN=postgresql+psycopg2://idin:idin@rdbms:5432/idin
+    - IDIN_GIT_COMMIT
+    - IDIN_CM_MERCHANT_TOKEN
+    volumes:
+    - "./etc:/etc/idin:ro"
+    expose:
+    - "8443"
+  http:
+    image: nginx:1.15.0-alpine
+    volumes:
+    - "./etc/certs/snakeoil.crt:/etc/ssl/certs/snakeoil.crt:ro"
+    - "./etc/private/snakeoil.pem:/etc/ssl/private/snakeoil.pem:ro"
+    - "./dev/nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+    ports:
+    - "127.0.0.1:${IDIN_HTTP_PORT-8443}:443"

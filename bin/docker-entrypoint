@@ -1,0 +1,23 @@
+#!/bin/sh
+export IDIN_RUNTIME=${IDIN_RUNTIME-service}
+export IDIN_CONFIG_FILE=${IDIN_CONFIG_FILE-/etc/idin/idin.conf}
+
+
+case $IDIN_RUNTIME in
+  shell)
+    ./bin/shell
+    break
+  ;;
+  noop)
+    break
+  ;;
+  http)
+    export IDIN_COMPONENTS="http"
+    python3 -m idin.runtime -c $IDIN_CONFIG_FILE
+    break
+  ;;
+  service)
+    python3 -m idin.runtime -c $IDIN_CONFIG_FILE
+    break
+  ;;
+esac
