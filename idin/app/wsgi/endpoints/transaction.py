@@ -1,6 +1,8 @@
 import ioc
 import sq.interfaces.http
 
+from ..schema import Transaction
+
 
 class TransactionEndpoint(sq.interfaces.http.Endpoint):
     """Deserializes, serializes and validates the structure of the input and output
@@ -40,6 +42,14 @@ class TransactionEndpoint(sq.interfaces.http.Endpoint):
     """
     pattern = "/transactions"
     ctrl = ioc.class_property("TransactionCtrl")
+
+    #: The mapping below specifies the schema of structured data in the
+    #: request body per content type.
+    payload = {
+        "post": {
+            "application/json": Transaction
+        }
+    }
 
 
 # pylint: skip-file
