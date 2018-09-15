@@ -21,7 +21,7 @@ class IdinService(BaseIdinService):
             '18y_or_older': params.pop('18y_or_older', False),
             'merchant_token': idin.environ.CM_MERCHANT_TOKEN,
             'merchant_return_url': params.pop('redirect_uri'),
-            'ec': ec
+            'entrance_code': ec
         })
         response = self._request('POST', '/transaction', json=params)
         if response.status_code != 200:
@@ -31,7 +31,7 @@ class IdinService(BaseIdinService):
         ref = result['merchant_reference']
 
         return self.dto(
-            url=result['merchant_return_url'],
+            url=result['issuer_authentication_url'],
             txid=txid
         )
 
