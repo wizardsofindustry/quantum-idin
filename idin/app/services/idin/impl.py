@@ -30,6 +30,7 @@ class IdinService(BaseIdinService):
                 data=json.dumps(status, sort_keys=True)
             )
             self.repo.persist(dto)
+        self.repo.setstatus(dto.txid, result)
         return status
 
     def transaction(self, dto):

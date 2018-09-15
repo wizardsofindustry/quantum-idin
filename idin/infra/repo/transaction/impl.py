@@ -22,6 +22,13 @@ class TransactionRepository(BaseTransactionRepository):
         h.update(str.encode(dao.data))
         return h.digest()
 
+    def setstatus(self, txid, status):
+        """Sets the status of the transaction identified by `txid`."""
+        self.session.query(Transaction)\
+            .filter(Transaction.txid == txid)\
+            .filter(Transaction.status == 'open')\
+            .update({'status': status})
+
     def persist_tx(self, dto):
       """Persists a Data Transfer Object (DTO) representing an
       iDIN transaction.
