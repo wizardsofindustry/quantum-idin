@@ -2,6 +2,7 @@ import ioc
 import sq.interfaces.http
 
 from ..schema import Transaction
+from ..schema import TransactionIdentifier
 
 
 class TransactionEndpoint(sq.interfaces.http.Endpoint):
@@ -48,6 +49,9 @@ class TransactionEndpoint(sq.interfaces.http.Endpoint):
     payload = {
         "post": {
             "application/json": Transaction
+        },
+        "patch": {
+            "application/json": TransactionIdentifier
         }
     }
 
