@@ -14,6 +14,12 @@ class IdinService(BaseIdinService):
 
     def update(self, dto):
         """Returns the result of an iDIN transaction."""
+        # Get the status from CM telecom.
+        status = self._request('POST', '/status', json={
+            'transaction_id': dto.txid,
+            'merchant_reference': self.finder.get_reference(dto.txid)
+        })
+        return status
 
     def transaction(self, dto):
         """Create a new iDIN transaction and return the redirect
@@ -28,10 +34,7 @@ class IdinService(BaseIdinService):
             'merchant_return_url': params.pop('redirect_uri'),
             'entrance_code': ec
         })
-        response = self._request('POST', '/transaction', json=params)
-        if response.status_code != 200:
-            raise RuntimeError(response.text)
-        result = response.json()
+        result = self._request('POST', '/transaction', json=params)
         dto.storage_class = 'tx'
         dto.created = quantum.lib.timezone.now()
         dto.ec = ec
@@ -46,8 +49,7 @@ class IdinService(BaseIdinService):
 
     def issuers(self, country=None):
         """Return a list containing all issuers."""
-        response = self._request('POST', '/directory')
-        dto = response.json()
+        dto = self._request('POST', '/directory')
         if country is None:
             return dto
 
@@ -60,5 +62,7 @@ class IdinService(BaseIdinService):
         json = kwargs.setdefault('json', {})
         if 'merchant_token' not in json:
             json['merchant_token'] = idin.environ.CM_MERCHANT_TOKEN
-        return requests.request(method, f'{self.base_url}{url}',
-            *args, **kwargs)
+        response = requests.request(method, f'{self.base_url}{url}', *args, **kwargs)
+        if response.status_code != 200:
+            raise RuntimeError(response.text)
+        return response.json()
