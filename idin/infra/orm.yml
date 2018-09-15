@@ -10,6 +10,11 @@ relations:
     primary_key: true
     description: >
       Transaction ID as specified by the intermediary.
+  - name: created
+    type: int64
+    description: >
+      The date/time at which the transaction was created, in milliseconds
+      since the UNIX epoch.
   - name: status
     type: string
     default:
@@ -24,7 +29,7 @@ relations:
     description: >
       Entrance code to be included in the response from the iDIN
       acquirer.
-  - name: reference
+  - name: ref
     type: string
     description: >
       Reference at the intermediary for accounting purposes.
