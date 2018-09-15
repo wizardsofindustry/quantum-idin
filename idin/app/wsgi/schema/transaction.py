@@ -78,6 +78,7 @@ class Transaction(sq.schema.Schema):
     #: internally), ``trxid`` is the ``txid`` that you will receive in
     #: this request.
     redirect_uri = sq.schema.fields.String(
+        required=True,
         allow_none=False
     )
 
