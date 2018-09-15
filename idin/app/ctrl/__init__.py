@@ -2,3 +2,4 @@
 appication. See also :class:`~idin.app.wsgi.application.WSGIApplication`.
 """
 from .issuer import IssuerCtrl
+from .transaction import TransactionCtrl
