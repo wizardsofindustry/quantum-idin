@@ -2,6 +2,7 @@
 import os
 
 import requests
+import quantum.lib.timezone
 
 import idin.environ
 from .base import BaseIdinService
@@ -15,6 +16,7 @@ class IdinService(BaseIdinService):
         """Create a new iDIN transaction and return the redirect
         URL.
         """
+        dto = self.dto(**dto)
         ec = bytes.hex(os.urandom(20))
         params = dict(dto)
         params.update({
@@ -27,12 +29,16 @@ class IdinService(BaseIdinService):
         if response.status_code != 200:
             raise RuntimeError(response.text)
         result = response.json()
-        txid = result['transaction_id']
-        ref = result['merchant_reference']
+        dto.storage_class = 'tx'
+        dto.created = quantum.lib.timezone.now()
+        dto.ec = ec
+        dto.txid = result['transaction_id']
+        dto.ref = result['merchant_reference']
+        self.repo.persist(dto)
 
         return self.dto(
             url=result['issuer_authentication_url'],
-            txid=txid
+            txid=dto.txid
         )
 
     def issuers(self, country=None):
