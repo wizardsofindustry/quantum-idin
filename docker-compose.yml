@@ -27,6 +27,21 @@
 #######################################################################
 version: '3'
 services:
+  idin_migrations:
+    build: .
+    environment:
+    - IDIN_RUNTIME=migrations
+    - IDIN_SECRET_KEY=70422360908e67dbbe1ac7bcf98f16b194ae51e779f690d9598c2d596c6e4bb4
+    - IDIN_DEBUG=1
+    - IDIN_IOC_DEFAULTS=/etc/idin/ioc.conf
+    - IDIN_IOC_DIR=/etc/idin/ioc.conf.d/
+    - IDIN_RDBMS_DSN=postgresql+psycopg2://idin:idin@rdbms:5432/idin
+    - IDIN_GIT_COMMIT
+    - IDIN_HTTP_ADDR=0.0.0.0
+    - IDIN_HTTP_PORT=8443
+    - IDIN_CM_MERCHANT_TOKEN
+    depends_on:
+    - rdbms
   idin:
     build: .
     environment:
@@ -40,6 +55,8 @@ services:
     - IDIN_HTTP_ADDR=0.0.0.0
     - IDIN_HTTP_PORT=8443
     - IDIN_CM_MERCHANT_TOKEN
+    depends_on:
+    - rdbms
     volumes:
     - "./etc:/etc/idin:ro"
     expose:
@@ -52,3 +69,14 @@ services:
     - "./dev/nginx.conf:/etc/nginx/conf.d/default.conf:ro"
     ports:
     - "127.0.0.1:${IDIN_HTTP_PORT-8443}:443"
+  rdbms:
+    image: postgres:10.3-alpine
+    restart: always
+    environment:
+    - POSTGRES_DB=idin
+    - POSTGRES_USER=idin
+    - POSTGRES_PASSWORD=idin
+    expose:
+    - 5432
+    ports:
+    - "127.0.0.1:${IDIN_RDBMS_PORT-5432}:5432"

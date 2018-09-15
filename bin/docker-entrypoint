@@ -4,6 +4,9 @@ export IDIN_CONFIG_FILE=${IDIN_CONFIG_FILE-/etc/idin/idin.conf}
 
 
 case $IDIN_RUNTIME in
+  migrations)
+    alembic upgrade head
+  ;;
   shell)
     ./bin/shell
     break
