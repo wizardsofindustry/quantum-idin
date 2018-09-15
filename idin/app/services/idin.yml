@@ -85,6 +85,16 @@ methods:
       Returns the results of an iDIN transaction
     returns: >
       Data Transfer Object (DTO)
+- name: update
+  parameters:
+  - name: dto
+  args: no
+  kwargs: no
+  doc:
+    heading: >
+      Updates the results of an iDIN transaction
+    returns: >
+      Data Transfer Object (DTO)
 
 # A list containing dependencies from the inversion-of-control
 # container that should be added to the base class as class

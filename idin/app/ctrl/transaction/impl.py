@@ -8,10 +8,10 @@ class TransactionCtrl(BaseTransactionCtrl):
     """
 
     async def patch(self, request, *args, **kwargs):
-        """Returns the results of the transaction identified by the request
+        """Updates the results of the transaction identified by the request
         payload.
         """
-        return self.idin.result(request.payload)
+        return 200, self.idin.update(request.payload)
 
     async def post(self, request, *args, **kwargs):
         """Creates a new iDIN transaction with the parameters specified in the

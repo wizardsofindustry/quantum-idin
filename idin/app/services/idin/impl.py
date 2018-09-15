@@ -12,6 +12,9 @@ class IdinService(BaseIdinService):
     """Provides an API to the CM Telecom iDIN gateway."""
     base_url = 'https://idin.cmtelecom.com/idin/v1.0'
 
+    def update(self, dto):
+        """Returns the result of an iDIN transaction."""
+
     def transaction(self, dto):
         """Create a new iDIN transaction and return the redirect
         URL.
