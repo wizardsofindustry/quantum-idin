@@ -2,21 +2,21 @@ import ioc
 import sq.interfaces.http
 
 
-class IssuerEndpoint(sq.interfaces.http.Endpoint):
+class CountryIssuerEndpoint(sq.interfaces.http.Endpoint):
     """Deserializes, serializes and validates the structure of the input and output
     (requests and response) to its configured URL endpoint, which exposes the
     following functionality:
 
-        Retrieve a listing of all the banks and their identifiers. The result is grouped by country.
+        Retrieve a listing of all the banks and their identifiers, for a specific country.
 
 
-    A :class:`IssuerEndpoint` validates the structure of the request headers,
+    A :class:`CountryIssuerEndpoint` validates the structure of the request headers,
     URL parameters, query parameters and entity prior to forwarding the
     request to its handler (controller).
 
     The handler function (e.g., :meth:`~IssuerCtrl.get()`) may,
     instead of a :class:`~sq.interfaces.http.Response` object, return a tuple
-    or a dictionary. The :class:`IssuerEndpoint` instance will interpret
+    or a dictionary. The :class:`CountryIssuerEndpoint` instance will interpret
     these return values as follows:
 
     -   If the return value is a :class:`dict`, then the endpoint assumes that
@@ -34,11 +34,11 @@ class IssuerEndpoint(sq.interfaces.http.Endpoint):
     best-matching content type in the client ``Accept`` header. If no
     match is found, the client receives a ``406`` response.
 
-    During serialization, A schema may be selected by :class:`IssuerEndpoint`
+    During serialization, A schema may be selected by :class:`CountryIssuerEndpoint`
     based on the response status code and content type, if one was defined in
     the OpenAPI definition for this API endpoint.
     """
-    pattern = "/issuers/"
+    pattern = "/issuers/<country>"
     ctrl = ioc.class_property("IssuerCtrl")
 
 
