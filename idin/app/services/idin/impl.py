@@ -71,9 +71,9 @@ class IdinService(BaseIdinService):
         return dto[0]['issuers']
 
     def _request(self, method, url, *args, **kwargs):
-        json = kwargs.setdefault('json', {})
-        if 'merchant_token' not in json:
-            json['merchant_token'] = idin.environ.CM_MERCHANT_TOKEN
+        dto = kwargs.setdefault('json', {})
+        if 'merchant_token' not in dto:
+            dto['merchant_token'] = idin.environ.CM_MERCHANT_TOKEN
         response = requests.request(method, f'{self.base_url}{url}', *args, **kwargs)
         if response.status_code != 200:
             raise RuntimeError(response.text)

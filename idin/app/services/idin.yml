@@ -62,7 +62,11 @@ bases:
 # parameters in the method signature.
 methods:
 - name: issuers
-  parameters: []
+  parameters:
+  - name: country
+    default:
+      type: literal
+      value: "None"
   args: no
   kwargs: no
   doc: null

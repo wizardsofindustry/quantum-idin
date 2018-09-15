@@ -6,7 +6,7 @@ class BaseIdinService(Service):
     repo = ioc.class_property('TransactionRepository')
     finder = ioc.class_property('TransactionFinder')
 
-    def issuers(self):
+    def issuers(self, country=None):
         raise NotImplementedError("Subclasses must override this method.")
 
     def transaction(self, dto):

@@ -1,6 +1,5 @@
 """Declares :class:`TransactionRepository`."""
 import hashlib
-import json
 
 from ...orm import Result
 from ...orm import Transaction
@@ -8,6 +7,7 @@ from .base import BaseTransactionRepository
 
 
 class TransactionRepository(BaseTransactionRepository):
+    """Exposes an interface to mutate the state of iDIN transactions."""
 
     def persist_result(self, dto):
         """Persists the result of a succesful iDIN transaction."""
@@ -16,7 +16,8 @@ class TransactionRepository(BaseTransactionRepository):
         self.session.add(dao)
         self.session.flush()
 
-    def _calculate_checksum(self, dao):
+    @staticmethod
+    def _calculate_checksum(dao):
         h = hashlib.sha256()
         h.update(str.encode(dao.txid))
         h.update(str.encode(dao.data))
@@ -30,10 +31,10 @@ class TransactionRepository(BaseTransactionRepository):
             .update({'status': status})
 
     def persist_tx(self, dto):
-      """Persists a Data Transfer Object (DTO) representing an
-      iDIN transaction.
-      """
-      dao = self.dao_factory(Transaction, dto)
-      self.session.add(dao)
-      self.session.flush()
-      return dao
+        """Persists a Data Transfer Object (DTO) representing an
+        iDIN transaction.
+        """
+        dao = self.dao_factory(Transaction, dto)
+        self.session.add(dao)
+        self.session.flush()
+        return dao
