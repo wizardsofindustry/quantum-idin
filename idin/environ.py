@@ -36,6 +36,10 @@ os.environ.setdefault('IDIN_IOC_DIR',
     "/etc/idin/ioc.conf.d/")
 os.environ.setdefault('IDIN_RDBMS_DSN',
     "postgresql+psycopg2://idin:idin@rdbms:5432/idin")
+os.environ.setdefault('IDIN_HTTP_ADDR',
+    "0.0.0.0")
+os.environ.setdefault('IDIN_HTTP_PORT',
+    "8443")
 
 
 SECRET_KEY = os.getenv('IDIN_SECRET_KEY')
@@ -44,6 +48,8 @@ IOC_DEFAULTS = os.getenv('IDIN_IOC_DEFAULTS')
 IOC_DIR = os.getenv('IDIN_IOC_DIR')
 RDBMS_DSN = os.getenv('IDIN_RDBMS_DSN')
 GIT_COMMIT = os.getenv('IDIN_GIT_COMMIT')
+HTTP_ADDR = os.getenv('IDIN_HTTP_ADDR')
+HTTP_PORT = os.getenv('IDIN_HTTP_PORT')
 CM_MERCHANT_TOKEN = os.getenv('IDIN_CM_MERCHANT_TOKEN')
 DEPLOYMENT_ENV = os.getenv('QUANTUM_DEPLOYMENT_ENV') or 'production'
 CONFIG_DIR = os.getenv('QUANTUM_CONFIG_DIR')
