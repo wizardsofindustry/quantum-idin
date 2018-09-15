@@ -8,5 +8,8 @@ class BaseTransactionRepository(Repository):
     def persist_tx(self, dto):
         raise NotImplementedError("Subclasses must override this method.")
 
+    def persist_result(self, dto):
+        raise NotImplementedError("Subclasses must override this method.")
+
 
 # pylint: skip-file
