@@ -1,4 +1,5 @@
 """Declares :class:`IdinService`."""
+import json
 import os
 
 import requests
@@ -19,15 +20,17 @@ class IdinService(BaseIdinService):
             'transaction_id': dto.txid,
             'merchant_reference': self.finder.reference(dto.txid)
         })
-        if status.pop('status') == 'success':
+        result = status.pop('status')
+        if result == 'success':
             dto = self.dto(
                 storage_class='result',
                 txid=status.pop('transaction_id'),
                 issuer_id=status.pop('issuer_id'),
-                result=status
+                retrieved=quantum.lib.timezone.now(),
+                data=json.dumps(status, sort_keys=True)
             )
             self.repo.persist(dto)
-        return dto.data
+        return status
 
     def transaction(self, dto):
         """Create a new iDIN transaction and return the redirect
