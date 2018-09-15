@@ -37,6 +37,8 @@ services:
     - IDIN_IOC_DIR=/etc/idin/ioc.conf.d/
     - IDIN_RDBMS_DSN=postgresql+psycopg2://idin:idin@rdbms:5432/idin
     - IDIN_GIT_COMMIT
+    - IDIN_HTTP_ADDR=0.0.0.0
+    - IDIN_HTTP_PORT=8443
     - IDIN_CM_MERCHANT_TOKEN
     volumes:
     - "./etc:/etc/idin:ro"
