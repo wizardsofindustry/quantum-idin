@@ -132,6 +132,14 @@ paths:
         qualname: TransactionCtrl
     post:
       operationId: create_transaction
+      requestBody:
+        description: >
+          Specifies the desired information to retrieve from the iDIN
+          acquirer.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Transaction"
       responses:
         201:
           description: >
@@ -194,6 +202,76 @@ components:
             Array of `Issuer` objects.
           items:
             $ref: "#/components/schemas/Issuer"
+
+    Transaction:
+      description: >
+        Specifies the properties for a new iDIN transaction.
+      type: object
+      nullable: false
+      required:
+      - issuer_id
+      - merchant_return_url
+      properties:
+        identity:
+          type: boolean
+          default: true
+          description: >
+            Retrieve a uniquely identifying token with the bank for this
+            consumer that is consistent across multiple sessions.
+        name:
+          type: boolean
+          default: false
+          description: >
+            Retrieve the name information associated with this consumer.
+        gender:
+          type: boolean
+          default: false
+          description: >
+            Retrieve the gender of this consumer.
+        address:
+          type: boolean
+          default: false
+          description: >
+            Retrieve address information associated with this consumer.
+        date_of_birth:
+          type: boolean
+          default: false
+          description: >
+            Retrieve the birthdate of the user.
+        18y_or_older:
+          type: boolean
+          default: false
+          description: >
+            Retrieve if this user is known to be 18 years or older.
+        email_address:
+          type: boolean
+          default: false
+          description: >
+            Retrieve the email address associated with this consumer.
+        telephone_number:
+          type: boolean
+          default: false
+          description: >
+            Retrieve the telephone number associated with this consumer.
+        issuer_id:
+          type: string
+          description: >
+            An identifier for the bank which the customer has chosen.
+        language:
+          type: string
+          default: en
+          description: >
+            The 2 character language code in which to return the results. Can be
+            either ‘nl’ or ‘en’ for Dutch or English. This is a preferred language,
+            not all banks support all languages.
+        redirect_uri:
+          type: string
+          description: >
+            The URI where the issuing bank should redirect the user to at the end
+            of the flow. The bank will append two query parameters to this URL when
+            returning the user to you, ``trxid`` and ``ec``. The latter will contain
+            the value of ``ec`` (generated and stored internally), ``trxid`` is the
+            ``txid`` that you will receive in this request.
 
     Issuer:
       description: >
