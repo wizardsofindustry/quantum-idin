@@ -14,5 +14,8 @@ class BaseIdinService(Service):
     def result(self, dto):
         raise NotImplementedError("Subclasses must override this method.")
 
+    def update(self, dto):
+        raise NotImplementedError("Subclasses must override this method.")
+
 
 # pylint: skip-file
