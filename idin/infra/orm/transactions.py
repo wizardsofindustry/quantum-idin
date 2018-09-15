@@ -18,6 +18,14 @@ class Transaction(Relation):
         nullable=False
     )
 
+    #: The date/time at which the transaction was created, in milliseconds
+    #: since the UNIX epoch.
+    created = sqlalchemy.Column(
+        sqlalchemy.BigInteger,
+        name='created',
+        nullable=False
+    )
+
     #: Current status of the transaction, may be one of ``open``,
     #: ``success``, ``cancelled``, ``failure`` or ``expired``.
     status = sqlalchemy.Column(
@@ -36,9 +44,9 @@ class Transaction(Relation):
     )
 
     #: Reference at the intermediary for accounting purposes.
-    reference = sqlalchemy.Column(
+    ref = sqlalchemy.Column(
         sqlalchemy.String,
-        name='reference',
+        name='ref',
         nullable=False
     )
 
