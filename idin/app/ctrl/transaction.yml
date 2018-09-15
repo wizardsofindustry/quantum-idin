@@ -40,7 +40,7 @@ bases:
 methods:
 - POST
 - GET
-
+- PATCH
 
 # A list containing dependencies from the inversion-of-control
 # container that should be added to the base class as class
