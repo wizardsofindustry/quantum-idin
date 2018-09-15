@@ -69,6 +69,16 @@ methods:
   args: no
   kwargs: no
   doc: null
+- name: setstatus
+  parameters:
+  - name: txid
+  - name: status
+  args: no
+  kwargs: no
+  doc:
+    heading: >
+      Sets the status for the transaction identified by ``txid``.
+    returns: None
 
 # A list containing dependencies from the inversion-of-control
 # container that should be added to the base class as class
