@@ -19,7 +19,7 @@ relations:
     type: string
     default:
       type: literal
-      value: "open"
+      value: "'open'"
     description: >
       Current status of the transaction, may be one of ``open``,
       ``success``, ``cancelled``, ``failure`` or ``expired``.
