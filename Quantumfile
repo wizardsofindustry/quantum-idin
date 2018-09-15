@@ -1,0 +1,239 @@
+---
+# General project information.
+project:
+  version: 1.0.0
+  name: No project name specified
+
+# This section specifies additional properties of the deployment
+# environment for the idin service.
+deployment:
+
+  # The deployment realm is either 'perimeter' (public-facing
+  # services), 'citadel' (core internal service), business
+  # (services implementing the business domain) or 'auxilary'
+  # (supporting services).
+  realm: citadel
+
+
+# This section describes the characteristics of the SG generated
+# application.
+app:
+
+  # Indicates that the application requires a relational database systen. Quantum
+  # services are assumed to connect to one RDBMS only.
+  rdbms: false
+
+  # Specifies the roles that the application has. Valid values are
+  # 'http', 'handler', 'runner', 'listener' or 'scheduler'.
+  roles:
+  - http
+
+
+django: null
+
+
+# Basic Python package configuration and settings.
+package:
+  language: python
+
+  # This is the name of the Python module that contains the application
+  # code, and is also used as a general identifier for this service.
+  name: idin
+
+  # Python module requirements from PyPi. Specified as in a requirements.txt,
+  # file.
+  requirements: []
+
+
+# The i18n section specifies all settings related to internationalization
+# (i18n) and localization (l10n).
+i18n:
+
+  # The i18n.default_language setting specifies the language default
+  # for all components in the Quantum service.
+  default_language: en
+
+  # Specifies all languages that may be selected either by the end-user
+  # or runtime configuration variables.
+  languages:
+  - name: English
+    code: en
+
+  # Indicates that application URLs should be translated, if
+  # applicable.
+  translate_urls: true
+
+
+# Application environment settings and variables.
+environ:
+  prefix: true # Prefix environment variables with IDIN_
+  variables:
+  - name: SECRET_KEY
+    default: 70422360908e67dbbe1ac7bcf98f16b194ae51e779f690d9598c2d596c6e4bb4
+    comment: Symmetric key for cryptographic operations.
+  - name: DEBUG
+    default: '1'
+    type: "switch"
+    comment: Run the application in debug mode.
+  - name: IOC_DEFAULTS
+    default: /etc/idin/ioc.conf
+    comments: >
+      Specifies the configuration file holding defaults for the inversion-of-control
+      context.
+  - name: IOC_DIR
+    default: /etc/idin/ioc.conf.d/
+    comments: >
+      Specifies a directory where the application will look for inversion-of-control
+      configuration files.
+  - name: RDBMS_DSN
+    default: postgresql+psycopg2://idin:idin@rdbms:5432/idin
+  - name: GIT_COMMIT
+    comments: >
+      The SHA-1 hash of the current Git commit.
+  - name: HTTP_ADDR
+    default: '0.0.0.0'
+    comment: Listen address for the HTTP interface.
+  - name: HTTP_PORT
+    default: '8443'
+    comment: Bind port for the HTTP interface.
+  - name: CM_MERCHANT_TOKEN
+    comment: >
+      Merchant token for the CM Telecom API.
+    type: "literal"
+
+
+# The application is currently not configured as an event listener. To
+# enable this feature, add the 'listener' role to the #/app/roles list.
+listener:
+
+  # Lists all events that the application subscribes to. This does not
+  # imply that it knows how to handle them (i.e., has a handler function
+  # configured), only that it wants to receive them.
+  events: []
+
+  # The list below configures the event handlers that are run on each
+  # incoming event message (individual handlers may choose to drop
+  # messages). Each item in the list is a dictionary, having at least
+  # a `qualname` member, specifying the Python qualified name (e.g.
+  # import path) to the event handler *class*. For more information on
+  # event handler classes, refer to the Sovereign Quantum documentation.
+  handlers:
+  - qualname: sq.event.NullEventHandler
+
+  # Specifies the channel from which this application will receive
+  # its event messages. Event messages are assumed to be routed
+  # according to the criteria specified above.
+  channel: idin.events.ingress
+
+
+# Security related settings.
+security:
+
+  # A generic application secret that may be used, for example, to generate
+  # signed cookies or other message signatures. This value MUST NOT be used in
+  # production, and exists for development and testing purposes only.
+  secret_key: 70422360908e67dbbe1ac7bcf98f16b194ae51e779f690d9598c2d596c6e4bb4
+
+  tls:
+
+    # A snakeoil X.509 certificate that is used to enable Transport Level Security (TLS)
+    # in non-production environments. Like `secret_key`, this configuration MUST NOT
+    # be used in production. Additional hostnames may be specified in the `hostnames`
+    # section.
+    hostnames:
+    - idin
+
+    crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIBuTCCASKgAwIBAgICA+gwDQYJKoZIhvcNAQELBQAwDzENMAsGA1UEAwwEaWRp
+      bjAeFw0xODA5MTUyMDE0MDhaFw0yODA5MTIyMDE0MDhaMA8xDTALBgNVBAMMBGlk
+      aW4wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAM1fBoqrH/Wfboo8QCFU1Xbw
+      T2wicstAS+qg74W6rUMrGx2NdpPjqggywaScbaEnSXX4XdGvUBw4FFjEMH2AGCbf
+      IUiII+IWxIpsG/ndZXMjbhqY3LI0j8XE2baweeunGWRK2ks13e/FbrQCLPa1a4Aw
+      Ke6QYCevpRDn0rXD2O8RAgMBAAGjJDAiMA8GA1UdEwQIMAYBAf8CAQAwDwYDVR0R
+      BAgwBoIEaWRpbjANBgkqhkiG9w0BAQsFAAOBgQAZU7WWJVBLvJ5mbEIXeKTX0yD8
+      I19dATe3UwryJsAFADs3qJ/PTUdoYzcFSInTB6YkIS6TbzC2UutALySkjXRXr52F
+      dnvLJmynZgEalQAnl4PgE1SsAmcRltX0la4f78EGppY+RnynnlGjELsLeuYSy549
+      Lrk/1hNrXI9RZskzwA==
+      -----END CERTIFICATE-----
+
+    key: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIICXQIBAAKBgQDNXwaKqx/1n26KPEAhVNV28E9sInLLQEvqoO+Fuq1DKxsdjXaT
+      46oIMsGknG2hJ0l1+F3Rr1AcOBRYxDB9gBgm3yFIiCPiFsSKbBv53WVzI24amNyy
+      NI/FxNm2sHnrpxlkStpLNd3vxW60Aiz2tWuAMCnukGAnr6UQ59K1w9jvEQIDAQAB
+      AoGBAMw3AbpCD7Weo7yxzNNYGCv9KfzNBHk3pkXZYlQIHOH9qyjn0lGcwScF0ahu
+      JFVrS5ETN7eaLH7jBNh/vfgNt/SmUfBnbLjd53nD+EeOVB06OBeF8cEOR1LZyaN7
+      imQjuRW2O6psPPFqz8C6WO5GZuUNsUIizaFOUHGYsjVvLAQBAkEA9LcO64vU+TlU
+      3YrfbSlc5PkWdtAuYRnUa2ggaE/EqM5g0Gmj9iQ5ihE4Zi+6NFS+x94dHL1j3vUo
+      cwbcGgTAiQJBANbXf/he2ppONjQM8O31JLTp+oYzNHFQel1KoQJoADhxYTHW6Zcw
+      EriQSRlHruYy7nR2/7IMuAPHmpvACo67yEkCQDIpnBtYjI2R3P2Uy/vacLpW/O3Z
+      +sfYvZxOueXoBA3+UAYowX1hK5JLuV3pBqhXfswFkb4kbGZ1ppb9nvyOYNECQE0Z
+      cxxP9gVQMhWF22SaB/1Axp4ofBZ6Oh+Gq7dwWTvoPGglZxjRsLY5WXJQDk0gVADJ
+      v8NG2zbICA0C4wcMDrkCQQDnOxyG6dOmD1xE9wwkonPxeW7w65yp9CPEgimKOYWV
+      X/esk6on9c5QgjIvFfFtJIVTjR5H+L/WPsEg+BFsZRGe
+      -----END RSA PRIVATE KEY-----
+
+
+
+# A list of Quantum services that the application requires.
+#requires:
+#- url: git+https://github.com/wizardsofindustry/quantum-usr.git
+
+
+# Configuration related to the automated testing of the Quantum
+# service.
+testing:
+  min_coverage: 100
+
+
+# Docker configuration.
+docker:
+
+  # The base image for the application container. This value
+  # may be changed to use a custom image, instead of the
+  # default Quantum base image.
+  base: wizardsofindustry/quantum:latest
+
+  # Specifies the Docker repository that is used for
+  # this application, used by development tooling and
+  # the CI/CD pipeline.
+  repository: null
+
+  # CI/CD configuration for containerization and image
+  # publication.
+  ci:
+    # The credentials that the CI/CD pipeline may use to
+    # login and publish to a Docker registry.
+    credentials_id: null
+
+    # Indicates if the CI pipeline may use VCS tags to tag
+    # containers.
+    use_tags: false
+
+    # Specifies the branches that will trigger a container build
+    # by default.
+    build_branches:
+    - name: master
+      tag: latest
+    - name: develop
+      tag: latest-testing
+    - pattern: "^(release|version|sprint)-.*$"
+    - pattern: "^(hotfix|fix)-.*$"
+    - pattern: "^(feature|task)-.*$"
+
+
+
+
+# This section contains SG related settings and should not be modified under
+# normal circumstances.
+sg:
+
+  # Specifies the SG project type. Allowed values are: service, system or infra.
+  type: service
+  dirname: .sg
+
+
+# Configuration file format version. Changing this will have dire
+# consequences.
+version: "1"
