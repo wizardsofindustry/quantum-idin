@@ -184,7 +184,7 @@ security:
 # Configuration related to the automated testing of the Quantum
 # service.
 testing:
-  min_coverage: 100
+  min_coverage: 0
 
 
 # Docker configuration.
