@@ -12,17 +12,16 @@
 openapi: "3.0.0"
 info:
   version: "1.0.0"
-  title: <provide a title for this API>
+  title: iDIN
   description: >
-    The description for this API may
-    span multiple lines.
+    Provides authentication through iDIN for Quantum services.
   termsOfService: TOS
   contact:
-    name: <enter the name of the person or entity responsible for this API>
-    url: https://api.example.com
-    email: maintainer@api.example.com
+    name: Cochise Ruhulessin
+    url: https://www.wizardsofindustry.net
+    email: cochise.ruhulessin@wizardsofindustry.net
   license:
-    name: <enter your license>
+    name: MIT
 paths:
   /health/:
     summary: Reports the general health of the application.
@@ -70,6 +69,30 @@ paths:
         default:
           $ref: "#/components/responses/UncaughException"
 
+  /issuers:
+    summary: >
+      Retrieve a listing of all the banks and their identifiers.
+      The result is grouped by country.
+    x-endpoint:
+      classname: IssuerEndpoint
+      controller:
+        qualname: IssuerCtrl
+    get:
+      operationId: get_vendors
+      responses:
+        200:
+          description:
+            All participating banks.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssuerSet"
+        503:
+          $ref: "#/components/responses/ServiceNotAvailable"
+        default:
+          $ref: "#/components/responses/UncaughException"
+
+
 components:
   responses:
     ServiceNotAvailable:
@@ -87,6 +110,52 @@ components:
             $ref: "#/components/schemas/Error"
 
   schemas:
+    IssuerSet:
+      description: >
+        Contains all iDIN Acquirers per country.
+      type: object
+      nullable: false
+      example:
+        country: Nederland
+        issuers:
+        - issuer_id: RABONL2U
+          issuer_name: Rabobank
+      required:
+      - country
+      - issuers
+      properties:
+        country:
+          type: string
+          description: >
+            The readable name of the country
+        issuers:
+          type: array
+          description: >
+            Array of `Issuer` objects.
+          items:
+            $ref: "#/components/schemas/Issuer"
+
+    Issuer:
+      description: >
+        An organization that is an iDN Acquirer
+      type: object
+      nullable: false
+      required:
+      - issuer_id
+      - issuer_name
+      properties:
+        issuer_id:
+          type: string
+          description: >
+            An identifier for the bank. Used as the value of the in bank selector
+            dropdowns. The end user selects a value and iDIN will direct the end
+            user to that bank, so that the user can identify himself. Has the
+            pattern `/[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}/`.
+        issuer_name:
+          type: string
+          description: >
+            A human-readable name of the issuer.
+
     Version:
       type: object
       nullable: false
