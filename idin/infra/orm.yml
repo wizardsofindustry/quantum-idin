@@ -1,1 +1,30 @@
 ---
+relations:
+- relname: transactions
+  classname: Transaction
+  description: >
+    Maintains information about iDIN transactions.
+  columns:
+  - name: txid
+    type: string
+    primary_key: true
+    description: >
+      Transaction ID as specified by the intermediary.
+  - name: status
+    type: string
+    default:
+      type: literal
+      value: "open"
+    description: >
+      Current status of the transaction, may be one of ``open``,
+      ``success``, ``cancelled``, ``failure`` or ``expired``.
+  - name: ec
+    type: string
+    max_length: 40
+    description: >
+      Entrance code to be included in the response from the iDIN
+      acquirer.
+  - name: reference
+    type: string
+    description: >
+      Reference at the intermediary for accounting purposes.
