@@ -69,8 +69,8 @@ methods:
     returns: string
 - name: result
   parameters:
-  - txid
-  - ec
+  - name: txid
+  - name: ec
   args: no
   kwargs: no
   doc:
