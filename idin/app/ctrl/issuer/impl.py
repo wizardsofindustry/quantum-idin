@@ -3,6 +3,10 @@ from .base import BaseIssuerCtrl
 
 
 class IssuerCtrl(BaseIssuerCtrl):
+    """Exposes a handler for ``GET`` requests."""
 
-    async def get(self, request, *args, **kwargs):
-        raise NotImplementedError("Subclasses must override this method.")
+    async def get(self, request, country=None, *args, **kwargs):
+        """Handle an incoming ``GET`` request and return the available
+        iDIN acquirers.
+        """
+        return 200, self.idin.issuers(country=country)
