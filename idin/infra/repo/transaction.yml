@@ -58,7 +58,8 @@ bases:
 # parameters in the method signature.
 methods:
 - name: persist_tx
-  parameters: []
+  parameters:
+  - name: dto
   args: no
   kwargs: no
   doc: null
