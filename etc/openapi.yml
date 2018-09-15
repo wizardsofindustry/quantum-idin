@@ -69,7 +69,37 @@ paths:
         default:
           $ref: "#/components/responses/UncaughException"
 
-  /issuers:
+  /issuers/{country}:
+    summary: >
+      Retrieve a listing of all the banks and their identifiers, for
+      a specific country.
+    x-endpoint:
+      classname: CountryIssuerEndpoint
+      controller:
+        qualname: IssuerCtrl
+    parameters:
+    - name: country
+      type: string
+      in: path
+      required: true
+    get:
+      operationId: get_vendors_for_country
+      responses:
+        200:
+          description:
+            All participating banks.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Issuer"
+        503:
+          $ref: "#/components/responses/ServiceNotAvailable"
+        default:
+          $ref: "#/components/responses/UncaughException"
+
+  /issuers/:
     summary: >
       Retrieve a listing of all the banks and their identifiers.
       The result is grouped by country.
