@@ -75,6 +75,16 @@ methods:
     heading: >
       Create a new iDIN transaction and return the redirect URL.
     returns: string
+- name: result
+  parameters:
+  - name: dto
+  args: no
+  kwargs: no
+  doc:
+    heading: >
+      Returns the results of an iDIN transaction
+    returns: >
+      Data Transfer Object (DTO)
 
 # A list containing dependencies from the inversion-of-control
 # container that should be added to the base class as class
