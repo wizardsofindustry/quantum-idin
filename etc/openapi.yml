@@ -130,6 +130,28 @@ paths:
       classname: TransactionEndpoint
       controller:
         qualname: TransactionCtrl
+    patch:
+      operationId: update_transation
+      requestBody:
+        description: >
+          The transaction identifier (``txid``) and entrance code
+          (``ec``) as returned by the iDIN acquirer.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionIdentifier"
+      responses:
+        200:
+          description: >
+            The iDIN transaction was a success.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IdinAssertion"
+        503:
+          $ref: "#/components/responses/ServiceNotAvailable"
+        default:
+          $ref: "#/components/responses/UncaughException"
     post:
       operationId: create_transaction
       requestBody:
@@ -178,6 +200,42 @@ components:
             $ref: "#/components/schemas/Error"
 
   schemas:
+    IdinAssertion:
+      description: >
+        The successful result of an iDIN transaction.
+      type: object
+      nullable: false
+      example:
+        bin: NLINGB3x4u89498qe4tqjvdaj0
+      required:
+      - bin
+      properties:
+        bin:
+          type: string
+          description: >
+            The Bank Identification Code (BIN), identifying the customer.
+
+    TransactionIdentifier:
+      description: >
+        Identifies an iDIN transaction.
+      type: object
+      nullable: false
+      example:
+        txid: "0156292263645409"
+        ec: "6ee7e77c42b58f83afe06e606de3c0bfa89c9a6d"
+      required:
+      - txid
+      - ec
+      properties:
+        txid:
+          type: string
+          description: >
+            The transaction identifier.
+        ec:
+          type: string
+          description: >
+            The entrance code as returned by the iDIN acquirer.
+
     IssuerSet:
       description: >
         Contains all iDIN Acquirers per country.
