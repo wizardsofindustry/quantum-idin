@@ -40,7 +40,7 @@ class Transaction(sq.schema.Schema):
     )
 
     #: Retrieve if this user is known to be 18 years or older.
-    18y_or_older = sq.schema.fields.Boolean(
+    legal_age = sq.schema.fields.Boolean(
         allow_none=False,
         missing=False
     )
