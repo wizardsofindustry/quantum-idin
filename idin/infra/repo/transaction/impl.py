@@ -19,7 +19,10 @@ class TransactionRepository(BaseTransactionRepository):
     @staticmethod
     def _calculate_checksum(dao):
         h = hashlib.sha256()
+        h.update(int.to_bytes(dao.retrieved, 8, 'big'))
         h.update(str.encode(dao.txid))
+        h.update(str.encode(dao.issuer_id))
+        h.update(str.encode(dao.bin))
         h.update(str.encode(dao.data))
         return h.digest()
 

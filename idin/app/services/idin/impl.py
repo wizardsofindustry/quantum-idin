@@ -26,12 +26,18 @@ class IdinService(BaseIdinService):
                 storage_class='result',
                 txid=status.pop('transaction_id'),
                 issuer_id=status.pop('issuer_id'),
+                bin=status.pop('bin'),
                 retrieved=quantum.lib.timezone.now(),
                 data=json.dumps(status, sort_keys=True)
             )
             self.repo.persist(dto)
         self.repo.setstatus(dto.txid, result)
-        return status
+        return self.dto(
+            issuer_id=dto.issuer_id,
+            txid=dto.txid,
+            success=result == 'status',
+            bin=dto.get('bin')
+        )
 
     def transaction(self, dto):
         """Create a new iDIN transaction and return the redirect

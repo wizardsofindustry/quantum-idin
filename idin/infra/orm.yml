@@ -48,6 +48,11 @@ relations:
     type: string
     description: >
       Identifies the issuer.
+  - name: bin
+    type: string
+    description: >
+      The Bank Identification Number (BIN) identifying the customer,
+      as returned by the iDIN issuer.
   - name: data
     type: string
     description: >
@@ -55,6 +60,7 @@ relations:
       keys.
   - name: checksum
     type: binary
+    unique: true
     description: >
       A SHA-256 hash of the transaction identifier and the result.
   - name: retrieved
