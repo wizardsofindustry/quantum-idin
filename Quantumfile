@@ -97,6 +97,7 @@ environ:
     default: '8443'
     comment: Bind port for the HTTP interface.
   - name: CM_MERCHANT_TOKEN
+    default: ""
     comment: >
       Merchant token for the CM Telecom API.
     type: "literal"
