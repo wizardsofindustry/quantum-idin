@@ -76,6 +76,15 @@ pipeline {
           workspace = pwd()
           tags = []
 
+          // Ensure that all tags are fetched and assign it to a variable. Note
+          // that if the branch contains multiple tags, the last one (as returned
+          // by git tag -l) will be used.
+          sh 'git fetch --tags'
+          commit_tag = sh(returnStdout: true, script: "git tag -l --points-at HEAD | tail -1").trim()
+          if (commit_tag) {
+            sh "echo 'Commit tag is: ${commit_tag}'"
+          }
+
           // Ensure that the base image is up-to-date
           image_base = docker.image('wizardsofindustry/quantum:latest')
           image_base.pull()
@@ -84,7 +93,7 @@ pipeline {
           // we have the latest version of the sg base image.
           // Put the Jenkins build identifier in the image
           // tag so that we can run concurrent builds.
-          image_name = 'idin'
+          image_name = 'wizardsofindustry/quantum-idin'
           image = docker.build("${image_name}:${env.BUILD_ID}")
         }
       }
@@ -193,11 +202,13 @@ pipeline {
               sh 'echo "Branch is not a candidate for Docker image build."'
           }
 
-          // Configure a Docker repository for this application to push the
-          // container to during this stage. Make should that you have also
-          // set the registry credentials in the global Jenkins configuration,
-          // if applicable. See also ./Quantumfile.
-          echo "Container push is not enabled."
+          if (tags) {
+            for (int i = 0; i < tags.size(); i++) {
+              withDockerRegistry([ credentialsId: 'wizards-docker-repo' ]) {
+                image.push("${tags[i]}")
+              }
+            }
+          }
         }
       }
     }
