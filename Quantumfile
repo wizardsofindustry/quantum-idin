@@ -199,18 +199,18 @@ docker:
   # Specifies the Docker repository that is used for
   # this application, used by development tooling and
   # the CI/CD pipeline.
-  repository: null
+  repository: wizardsofindustry/quantum-idin
 
   # CI/CD configuration for containerization and image
   # publication.
   ci:
     # The credentials that the CI/CD pipeline may use to
     # login and publish to a Docker registry.
-    credentials_id: null
+    credentials_id: wizards-docker-repo
 
     # Indicates if the CI pipeline may use VCS tags to tag
     # containers.
-    use_tags: false
+    use_tags: true
 
     # Specifies the branches that will trigger a container build
     # by default.
