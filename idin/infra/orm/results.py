@@ -26,6 +26,14 @@ class Result(Relation):
         nullable=False
     )
 
+    #: The Bank Identification Number (BIN) identifying the customer, as
+    #: returned by the iDIN issuer.
+    bin = sqlalchemy.Column(
+        sqlalchemy.String,
+        name='bin',
+        nullable=False
+    )
+
     #: The data yielded by the iDIN transaction, serialized as JSON with
     #: sorted keys.
     data = sqlalchemy.Column(
